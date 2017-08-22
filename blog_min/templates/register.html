@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/static/css/edmure.css"/>
+    <link rel="stylesheet" href="/static/css/commons.css"/>
+    <link rel="stylesheet" href="/static/css/account.css"/>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="register">
+    <div style="font-size: 25px; font-weight: bold;text-align: center;">
+        用户注册
+    </div>
+    <form id="fm" method="post" action="/register.html" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="text" class="form-control" name="email" id="email" placeholder="请输入密码">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="请输入密码">
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">确认密码</label>
+            <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="请重新输入密码">
+        </div>
+
+        <div class="form-group">
+            <label for="password">验证码</label>
+
+            <div class="row">
+                <div class="col-xs-7">
+                    <input type="text" class="form-control" name="check_code" id="check_code" placeholder="请输入验证码">
+                </div>
+                <div class="col-xs-5">
+                    <img id="check_code_img" src="/check_code.html"onclick="changeImg(this);">
+                </div>
+            </div>
+
+        </div>
+        <div>
+            <input id="submit" class="btn btn-default" value="确认" style="float: left;width: 70px"/>
+        </div>
+        <div class="col-xs-9" style="float: right">
+                <div class="alert alert-danger hide">
+                    <span style="padding: 0 5px 0 5px;display: inline-block;font-size: 14px">
+                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                    </span>
+                    <span id="error_msg" style="font-size: 12px;"></span>
+                </div>
+            </div>
+    </form>
+</div>
+</body>
+<script src="/static/js/jquery-1.12.4.js"></script>
+<script>
+
+     $(function () {
+            bindLogin();
+        });
+
+        function bindLogin() {
+            $('#submit').click(function () {
+                var $msg = $('#error_msg');
+                $msg.parent().addClass('hide');
+                var a = $('#fm').serialize();
+                console.log(a);
+
+                $.ajax({
+                    url: '/register.html',
+                    type: 'POST',
+                    data: $('#fm').serialize(),
+                    dataType: 'JSON',
+                    success: function (arg) {
+{#                        alert(arg.status);#}
+{#                        alert(arg.message);#}
+{#                        alert(arg.data);#}
+
+                        if(arg.status){
+                            location.href = '/'
+                        }else{
+                            $msg.parent().removeClass('hide');
+                            $msg.text(arg.message);
+                            var img = $('#check_code_img')[0];
+                                img.src = img.src + '?';
+                            $('#username,#password,#check_code').val('');
+                             window.location.reload()
+
+                        }
+
+                    }
+                })
+
+            })
+        }
+        function changeImg(ths) {
+
+                ths.src = ths.src + "?";
+            }
+</script>
+</html>

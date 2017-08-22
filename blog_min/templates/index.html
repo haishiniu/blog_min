@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>博文园</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        /* 去除a标签的下划线*/
+        a{
+            text-decoration: none;
+        }
+
+        .container1{
+{#            border: 1px solid red;#}
+            width: 1000px;
+            margin: 0 auto;
+
+        }
+        .main_content{
+            float: left;
+            width:60%;
+{#            border: 1px solid blue;#}
+            min-height: 1000px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+       .h1{
+           text-shadow: 7px 7px 7px #888683;
+           text-align: center;
+        }
+       .col-xs-12 .h1{
+{#           border: 1px solid royalblue;#}
+           line-height: 100px;
+       }
+       .left_content{
+           float: left;
+{#           border: 1px solid red;#}
+              width: 19%;
+              height: 500px;
+       }
+
+        .right_content{
+            float: left;
+            width: 19%;
+            height: 500px;
+{#            border: 1px solid royalblue;#}
+
+        }
+        .footers_content{
+            clear: both;
+            width: 98%;
+            height: 200px;
+            border-top: solid wheat 1px;
+        }
+
+        footer-box {
+{#                border: 1px solid black;#}
+                clear: both;
+                margin-top: 10px;
+                width: 1000px;
+                background-color: white;
+                /*border-top:1px solid red;*/
+            }
+
+       .footer-box .foot-nav {
+           /*border: 1px solid darkmagenta;*/
+           margin-top: 45px;
+           padding-top: 15px;
+           text-align: center;
+            }
+
+        .footer-box .foot-nav2 {
+            /*border: 1px solid red;*/
+            margin-top: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .foot_b {
+                color: #999;
+                font-size: 14px;
+            }
+
+    </style>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/static/css/edmure.css"/>
+    <link rel="stylesheet" href="/static/css/commons.css"/>
+    <link rel="stylesheet" href="/static/css/row-avatar.css"/>
+
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap/js/bootstrap.js"></script>
+</head>
+
+<body>
+<header class="main-header" style="background-image: url('/static/imgs/background.jpg');height: 150px;width: 100%">
+        <div class="col-xs-12">
+            <h1 class="h1">孤独者的Python之路</h1>
+            <div id="div1" style="margin-left: 1000px;font-size: 15px"></div>
+        </div>
+</header>
+{% include 'include/header.html' %}
+<div class="left_content"></div>
+<div class="content ">
+    <div class="main_content">
+        <div class="col-md-8">
+            <div class="article-list">
+                {% for row in article_list %}
+                    <div class="article-item clearfix">
+                        <h3><a href="/{{ row.blog.site }}/{{ row.nid }}.html">{{ row.title }}</a></h3>
+                        <div class="clearfix">
+                            <a class="avatar left" href="#">
+                                <img src="/static/imgs/avatar/001.jpg">
+                            </a>
+                            {{ row.summary }}
+
+                        </div>
+                        <div class="footers">
+                            <a href="/{{row.blog.site}}.html">
+                                <i class="fa fa-user-o" aria-hidden="true"></i>
+                                <span>{{ row.blog.user.nickname }}</span>
+                            </a>
+                            <span>发布于 {{ row.create_time }}</span>
+                            <a  class="ele">
+                                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                                <span>{{ row.comment_count }}</span>
+                            </a>
+                            <a  class="ele">
+                                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                <span>{{ row.up_count }}</span>
+                            </a>
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            <div class="clearfix">
+
+                <ul class="pagination">
+                    {{ page_str }}
+                </ul>
+
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default hot-recommend">
+                <div class="panel-heading">最新推荐</div>
+
+                <div class="panel-body">
+                    {% for new in article_list_new %}
+                    <ul class="list-unstyled">
+                        <li><a href="/{{ new.blog.site }}/{{ new.nid }}.html" >{{ new.title }}</a></li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="panel panel-default hot-comment">
+                <div class="panel-heading">评论最多</div>
+                <div class="panel-body">
+                    {% for more in article_list_more %}
+                    <ul class="list-unstyled">
+                       <li><a href="/{{ more.blog.site }}/{{ more.nid }}.html">{{ more.title }}</a></li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="right_content">
+
+</div>
+
+<div class="footers_content">
+
+
+    {% include 'include/footer.html' %}
+
+        </div>
+
+
+<script>
+        window.onload = function(){
+            var oDiv = document.getElementById('div1');
+
+            function fnTimego(){
+                var oNow = new Date();
+                var iYear = oNow.getFullYear();
+                // 月份是0到11
+                var iMonth = oNow.getMonth()+1;
+                var iDate = oNow.getDate();
+                // 星期是0到6
+                var iDay = oNow.getDay();
+                var iHour = oNow.getHours();
+                var iMinute = oNow.getMinutes();
+                var iSecond = oNow.getSeconds();
+
+                var sTr = '当前时间是：' + iYear + '年' + iMonth + '月' + iDate+ '日 星期'+fnToweek(iDay)+' '+fnTodouble(iHour)+':'+fnTodouble(iMinute)+':'+fnTodouble(iSecond);
+                oDiv.innerHTML = sTr;
+            }
+
+            fnTimego();
+
+            setInterval(fnTimego,1000);
+
+            function fnTodouble(n){
+                if(n<10)
+                {
+                    return '0'+n;
+                }
+                else
+                {
+                    return n;
+                }
+            }
+
+
+            function fnToweek(n){
+                if(n==0)
+                {
+                    return '天';
+                }
+                else if(n==1)
+                {
+                   return '一';
+                }
+                else if(n==2)
+                {
+                   return '二';
+                }
+                else if(n==3)
+                {
+                   return '三';
+                }
+                else if(n==4)
+                {
+                   return '四';
+                }
+                else if(n==5)
+                {
+                   return '五';
+                }
+                else if(n==6)
+                {
+                   return '六';
+                }
+            }
+
+        }
+
+
+    </script>
+
+
+</body>
+</html>
